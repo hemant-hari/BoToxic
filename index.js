@@ -27,7 +27,7 @@ bot.on('message', msg => {
 
     try {
         bot.commands.get(command).execute(msg, args);
-        msg.react('✔️');
+        msg.react('☣️');
     } catch (error) {
         console.error(error);
         msg.reply('there was an error trying to execute that command!');
