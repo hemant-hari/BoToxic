@@ -23,7 +23,7 @@ module.exports = {
                     .setDescription(responsePost.url)
                     .setAuthor(responsePost.author)
                 if (responsePost.url.includes("jpg")){
-                    embed.attachFiles(responsePost.url);
+                    embed.setImage(responsePost.url);
                 }
                 msg.channel.send(embed);
             })
