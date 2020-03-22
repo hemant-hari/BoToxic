@@ -1,0 +1,2 @@
+# BoToxic
+ Discord Bot Playground
