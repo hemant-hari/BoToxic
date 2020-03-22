@@ -6,8 +6,7 @@ module.exports = {
     description: 'Grabs the top reddit post for the given subreddit',
 	execute(msg, args) {
         if (args.length <= 0) return;
-        console.log(args);
-        axios.get('http://reddit.com/r/' + args[0] + '.json')
+        axios.get('https://reddit.com/r/' + args[0] + '.json')
             .then(res => {
                 var posts = res.data.data.children;
                 var responsePost
@@ -20,7 +19,7 @@ module.exports = {
                 var embed = new MessageEmbed();
                 embed
                     .setTitle(responsePost.title)
-                    .setDescription(responsePost.url)
+                    .setDescription("https://reddit.com" + responsePost.permalink)
                     .setAuthor(responsePost.author)
                 if (responsePost.url.includes("jpg")){
                     embed.setImage(responsePost.url);
