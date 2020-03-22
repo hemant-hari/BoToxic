@@ -1,0 +1,24 @@
+{
+  "name": "botoxic",
+  "version": "1.0.0",
+  "description": "discord bot trial",
+  "main": "index.js",
+  "dependencies": {
+    "discord.js": "^12.0.2",
+    "dotenv": "^8.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hemant-hari/BoToxic.git"
+  },
+  "author": "Hemant Hari",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hemant-hari/BoToxic/issues"
+  },
+  "homepage": "https://github.com/hemant-hari/BoToxic#readme"
+}
