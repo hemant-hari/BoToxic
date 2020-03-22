@@ -1,4 +1,5 @@
 module.exports = {
     Ping: require('./ping'),
-    DootDoot: require('./dootdoot')
+    DootDoot: require('./dootdoot'),
+    RedditTop: require('./reddittop')
 };

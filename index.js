@@ -18,7 +18,10 @@ bot.on('ready', () => {
 
 bot.on('message', msg => {
     const args = msg.content.split(/ +/);
-    const command = args.shift().toLowerCase();
+    var command = args.shift().toLowerCase();
+    if (command.charAt(0) != '$') return;
+    command = command.substring(1);
+
     console.info(`Called command: ${command}`);
 
     if (msg.author.bot) return;
