@@ -1,5 +1,6 @@
 require('dotenv').config();
 const Discord = require('discord.js');
+const MessageEmbed = require('discord.js').MessageEmbed;
 const bot = new Discord.Client();
 bot.commands = new Discord.Collection();
 const botCommands = require('./commands');
@@ -22,7 +23,10 @@ bot.on('message', msg => {
     if (command.charAt(0) != '$') return;
     command = command.substring(1);
 
-    console.info(`Called command: ${command}`);
+    if (command === 'help'){
+        replyWithCommandDescriptions(msg, bot.commands);
+        return;
+    }
 
     if (msg.author.bot) return;
     if (!bot.commands.has(command)) return;
@@ -36,3 +40,11 @@ bot.on('message', msg => {
         msg.reply('there was an error trying to execute that command!');
     }
 });
+
+function replyWithCommandDescriptions(msg, commands){
+    var embed = new MessageEmbed();
+    commands.map(cmd => {
+        embed.addField('$' + cmd.name, cmd.description);
+    });
+    msg.reply(embed);
+}

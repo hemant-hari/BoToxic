@@ -3,7 +3,7 @@ const MessageEmbed = require('discord.js').MessageEmbed;
 
 module.exports = {
 	name: 'apod',
-    description: 'Grabs the Astronomy Picture Of the Day from NASA',
+    description: 'Grabs the Astronomy Picture Of the Day from NASA (Optionally input date in YYYY-MM-DD format)',
 	execute(msg, args) {
         var date = args.length >= 1 ? "&date=" + args[0] : "";
         axios.get("https://api.nasa.gov/planetary/apod?api_key=" + process.env.NASA_TOKEN + date)
