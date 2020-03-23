@@ -5,10 +5,7 @@ module.exports = {
 	name: 'apod',
     description: 'Grabs the Astronomy Picture Of the Day from NASA',
 	execute(msg, args) {
-        var date = "";
-        if (args.length >= 1){
-            date = "&date=" + args[0];
-        }
+        var date = args.length >= 1 ? "&date=" + args[0] : "";
         axios.get("https://api.nasa.gov/planetary/apod?api_key=" + process.env.NASA_TOKEN + date)
             .then(response => {
                 console.log(response);
