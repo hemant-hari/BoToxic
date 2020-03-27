@@ -21,7 +21,11 @@ module.exports = {
                     .setTitle(responsePost.title)
                     .setDescription("https://reddit.com" + responsePost.permalink)
                     .setAuthor(responsePost.author)
-                if (responsePost.url.includes("jpg")){
+                if (responsePost.url.includes("jpg")
+                    || responsePost.url.includes("png")
+                    || responsePost.url.includes("imgur")
+                    || responsePost.url.includes("gfycat")
+                    || responsePost.url.includes("giphy")){
                     embed.setImage(responsePost.url);
                 }
                 msg.channel.send(embed);
