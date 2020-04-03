@@ -19,6 +19,7 @@ app.use(express.static('public'));
 app.get('/', entryPoint);
 function entryPoint(req, res){
   console.log("here I am buddy boy");
+  res.sendFile(path.join(__dirname, 'public/app.html'));
 }
 
 app.listen(8000, () => console.log('listening on port 8000'));
