@@ -12,7 +12,7 @@ module.exports = {
     description: "Listens for spotify links for spotify integration integration",
     listen: function (msg) {
         reactions.react(msg);
-        var reactionListener = msg.createReactionCollector((reactions.filter), { time: 3600000 });
+        var reactionListener = msg.createReactionCollector((reactions.filter), { time: 10 * 60 * 60 * 1000 });
         reactionListener.on('collect', (reaction, user) => reactions.handle(reaction, user, api));
     }
 }

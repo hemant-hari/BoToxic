@@ -23,6 +23,7 @@ module.exports = {
             api.setRefreshToken(user.spotify.refreshToken);
         } catch {
             reaction.message.channel.send("Something went wrong retrieving your spotify data, have you linked your account?");
+            return;
         }
 
         try {
@@ -32,7 +33,7 @@ module.exports = {
                 if (refresh.name === 'WebapiError') { msg.channel.send("Could not authenticate - please relink your account"); }
 
                 updateDbToken(user.id, refresh.body['access_token']);
-                response = await enqueueTrack(reaction, user.spotify.accessToken).catch(e => console.log(e))
+                response = enqueueTrack(reaction, user.spotify.accessToken).catch(e => console.log(e))
             }
 
             api.resetAccessToken();
