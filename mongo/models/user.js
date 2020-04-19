@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
 
 var userObject = {
-    id: { type: String, index: true },
-    username: { type: String, unique: true },
+    id: { type: String, unique: true },
+    username: { type: String, index: true },
     spotify: {
         accessToken: String,
         refreshToken: String,
@@ -10,5 +10,17 @@ var userObject = {
     },
 };
 var userSchema = mongoose.Schema(userObject);
+var User = mongoose.model('User', userSchema);
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = User;
+
+module.exports.updateAccessToken = function (userId, accessToken) {
+    var callback;
+    User.update(
+        { id },
+        { spotify: { accessToken } },
+        (err, raw) => callback = { err, raw }
+    );
+
+    return callback;
+};

@@ -62,10 +62,14 @@ app.get('/spotifycallback', async function (req, res) {
     },
   });
 
-  user.save((err, user) => {
-    if (err) { console.log(err); }
-    console.log(user);
-  });
+  User
+    .updateOne(
+      { id },
+      user,
+      { upsert: true, setDefaultsOnInsert: true })
+    .catch(
+      e => console.log(e)
+    );
 
   spotifyApi.setAccessToken(accessGrant.body.access_token);
   spotifyApi.setRefreshToken(accessGrant.body.refresh_token);
