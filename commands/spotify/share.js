@@ -14,7 +14,7 @@ module.exports = {
             api.setAccessToken(user[0].spotify.accessToken);
             api.setRefreshToken(user[0].spotify.refreshToken);
 
-            var spotifyDetails = await api.getMyCurrentPlaybackStateMe().catch(e => spotifyDetails = e);
+            var spotifyDetails = await api.getMyCurrentPlaybackState().catch(e => spotifyDetails = e);
             if (spotifyDetails.statusCode == 401) {
                 var refresh = await api.refreshAccessToken().catch(e => console.log(e));
                 if (refresh.name === 'WebapiError') { msg.channel.send("Could not authenticate - please relink your account"); }
