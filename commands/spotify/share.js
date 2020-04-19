@@ -22,7 +22,7 @@ module.exports = {
                 api.setAccessToken(refresh.body['access_token']);
                 updateDbToken(msg.author.id, refresh.body['access_token']);
 
-                spotifyDetails = await api.getMyCurrentPlaybackStateMe().catch(e => console.log(e))
+                spotifyDetails = await api.getMyCurrentPlaybackState().catch(e => console.log(e))
             }
 
             if (spotifyDetails.name !== 'WebapiError') {
