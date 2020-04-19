@@ -14,7 +14,7 @@ var User = mongoose.model('User', userSchema);
 
 module.exports = User;
 
-module.exports.updateAccessToken = async function (userId, accessToken) {
+module.exports.updateAccessToken = async function (id, accessToken) {
     var callback;
     User.update(
         { id },
