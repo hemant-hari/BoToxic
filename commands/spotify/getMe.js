@@ -11,18 +11,13 @@ module.exports = {
                 msg.channel.send("Oh no! Something went wrong - please don't contact the creator");
             }
 
-            console.log(user);
-
-            user = user[0];
-            api.setAccessToken(user.spotify.accessToken);
-            api.setRefreshToken(user.spotify.refreshToken);
+            api.setAccessToken(user[0].spotify.accessToken);
+            api.setRefreshToken(user[0].spotify.refreshToken);
 
             var spotifyDetails = await api.getMe().catch(e => spotifyDetails = e);
-
-            console.log(spotifyDetails);
             if (spotifyDetails.statusCode == 401) {
                 var refresh = await api.refreshAccessToken().catch(e => console.log(e));
-                if (retry.name === 'WebapiError') { msg.channel.send("Could not authenticate - please relink your account"); }
+                if (refresh.name === 'WebapiError') { msg.channel.send("Could not authenticate - please relink your account"); }
 
                 api.setAccessToken(refresh.body['access_token']);
                 updateDbToken(msg.author.id, refresh.body['access_token']);
