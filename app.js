@@ -52,7 +52,7 @@ app.get('/spotifycallback', async function (req, res) {
   var id = state[0];
   var username = state[1];
 
-  var user = new User({
+  var user = {
     id,
     username,
     spotify: {
@@ -60,7 +60,7 @@ app.get('/spotifycallback', async function (req, res) {
       refreshToken: accessGrant.body.refresh_token,
       expiry: accessGrant.body.expires_in,
     },
-  });
+  };
 
   User
     .updateOne(
@@ -70,12 +70,6 @@ app.get('/spotifycallback', async function (req, res) {
     .catch(
       e => console.log(e)
     );
-
-  spotifyApi.setAccessToken(accessGrant.body.access_token);
-  spotifyApi.setRefreshToken(accessGrant.body.refresh_token);
-
-  var userData = await spotifyApi.getMe().catch(e => console.log(e));
-  console.log(userData);
 
   res.sendFile(path.join(__dirname, 'public/app.html'));
 });
