@@ -26,7 +26,7 @@ module.exports = {
         }
 
         try {
-            var response = await enqueueTrack(reaction, user.spotify.accessToken).catch(e => success = e);
+            var response = await enqueueTrack(reaction, user.spotify.accessToken).catch(e => response = e);
             if (response.statusCode == 401) {
                 var refresh = await api.refreshAccessToken().catch(e => console.log(e));
                 if (refresh.name === 'WebapiError') { msg.channel.send("Could not authenticate - please relink your account"); }
