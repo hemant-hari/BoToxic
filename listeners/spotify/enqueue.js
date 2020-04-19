@@ -10,7 +10,7 @@ function getURI(message) {
 };
 
 function getURL(message) {
-    var spotifyRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/gi;
+    var spotifyRegex = /https?:\/\/open\.spotify\.com\/track\/\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/gi;
     return message.content.match(spotifyRegex)[0];
 };
 
@@ -24,10 +24,6 @@ module.exports = {
         } catch {
             reaction.message.channel.send("Something went wrong retrieving your spotify data, have you linked your account?");
         }
-
-        console.log(user);
-
-        console.log(getURI(reaction.message));
 
         try {
             var response = await enqueueTrack(reaction, user.spotify.accessToken).catch(e => success = e);
