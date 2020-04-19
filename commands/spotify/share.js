@@ -28,6 +28,9 @@ module.exports = {
             if (spotifyDetails.name !== 'WebapiError') {
                 msg.channel.send(`You should listen to this! ${spotifyDetails.body.item.external_urls.spotify}`);
             }
+            else if (spotifyDetails.statusCode == 204) {
+                msg.channel.send('You are either not playing a song or in a private session');
+            }
             else {
                 msg.channel.send("Something went wrong!");
             }
