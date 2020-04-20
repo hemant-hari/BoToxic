@@ -18,7 +18,7 @@ module.exports.updateAccessToken = async function (id, accessToken) {
     var callback;
     User.update(
         { id },
-        { spotify: { accessToken } },
+        { $set: { "spotify.accessToken": accessToken } },
         (err, raw) => callback = { err, raw }
     );
 
