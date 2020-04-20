@@ -1,7 +1,7 @@
 var User = require('../../mongo/models/user');
 var updateDbToken = require('../../mongo/models/user').updateAccessToken;
 var WebApiRequest = require('../../../node_modules/spotify-web-api-node/src/webapi-request');
-HttpManager = require('../../../node_modules/spotify-web-api-node/src/http-manager');
+var HttpManager = require('../../../node_modules/spotify-web-api-node/src/http-manager');
 
 function getURI(message) {
     var url = getURL(message);
@@ -30,7 +30,7 @@ module.exports = {
             var response = await enqueueTrack(reaction, user.spotify.accessToken).catch(e => response = e);
             if (response.statusCode == 401) {
                 var refresh = await api.refreshAccessToken().catch(e => refresh = e);
-                if (refresh.name === 'WebapiError') { msg.channel.send("Could not authenticate - please relink your account"); }
+                if (refresh.name === 'WebapiError') { reaction.message.channel.send("Could not authenticate - please relink your account"); }
 
                 api.setAccessToken(refresh.body['access_token']);
                 updateDbToken(user.id, refresh.body['access_token']);

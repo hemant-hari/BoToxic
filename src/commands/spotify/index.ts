@@ -1,6 +1,6 @@
 var SpotifyWebApi = require('spotify-web-api-node');
-const Discord = require('discord.js');
-const MessageEmbed = require('discord.js').MessageEmbed;
+var Discord = require('discord.js');
+var MessageEmbed = require('discord.js').MessageEmbed;
 var subCommandList = require('./subcommands');
 var subCommands = new Discord.Collection();
 
