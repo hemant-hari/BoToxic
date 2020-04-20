@@ -1,7 +1,9 @@
-var SpotifyWebApi = require('spotify-web-api-node');
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var spotify_web_api_node_1 = require("spotify-web-api-node");
 var reactions = require('./reactions');
 require('dotenv').config();
-var api = new SpotifyWebApi({
+var api = new spotify_web_api_node_1.SpotifyWebApi({
     clientId: process.env.SPOTIFY_ID,
     clientSecret: process.env.SPOTIFY_SECRET,
     redirectUri: 'https://botoxic.hemanthari.com/spotifycallback'

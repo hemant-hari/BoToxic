@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,7 +35,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var User = require('../../mongo/models/user');
+Object.defineProperty(exports, "__esModule", { value: true });
+var DbUser = require('../../mongo/models/user');
 var updateDbToken = require('../../mongo/models/user').updateAccessToken;
 var WebApiRequest = require('../../../node_modules/spotify-web-api-node/src/webapi-request');
 var HttpManager = require('../../../node_modules/spotify-web-api-node/src/http-manager');
@@ -49,21 +51,20 @@ function getURL(message) {
     return message.content.match(spotifyRegex)[0];
 }
 ;
-module.exports = {
+exports.default = {
     description: "Enqueues a song to the user's spotify account",
     execute: function (reaction, user, api) {
-        var user;
         return __awaiter(this, void 0, void 0, function () {
-            var _a, response, refresh, e_1;
+            var dbUser, _a, response, refresh, e_1;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         _b.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, User.findOne({ id: user.id })];
+                        return [4 /*yield*/, DbUser.findOne({ id: user.id })];
                     case 1:
-                        user = _b.sent();
-                        api.setAccessToken(user.spotify.accessToken);
-                        api.setRefreshToken(user.spotify.refreshToken);
+                        dbUser = _b.sent();
+                        api.setAccessToken(dbUser.spotify.accessToken);
+                        api.setRefreshToken(dbUser.spotify.refreshToken);
                         return [3 /*break*/, 3];
                     case 2:
                         _a = _b.sent();
@@ -71,7 +72,7 @@ module.exports = {
                         return [2 /*return*/];
                     case 3:
                         _b.trys.push([3, 7, , 8]);
-                        return [4 /*yield*/, enqueueTrack(reaction, user.spotify.accessToken).catch(function (e) { return response = e; })];
+                        return [4 /*yield*/, enqueueTrack(reaction, dbUser.spotify.accessToken).catch(function (e) { return response = e; })];
                     case 4:
                         response = _b.sent();
                         if (!(response.statusCode == 401)) return [3 /*break*/, 6];
@@ -82,8 +83,8 @@ module.exports = {
                             reaction.message.channel.send("Could not authenticate - please relink your account");
                         }
                         api.setAccessToken(refresh.body['access_token']);
-                        updateDbToken(user.id, refresh.body['access_token']);
-                        response = enqueueTrack(reaction, user.spotify.accessToken).catch(function (e) { return console.log(e); });
+                        updateDbToken(dbUser.id, refresh.body['access_token']);
+                        response = enqueueTrack(reaction, refresh.body['access_token']).catch(function (e) { return console.log(e); });
                         _b.label = 6;
                     case 6:
                         api.resetAccessToken();

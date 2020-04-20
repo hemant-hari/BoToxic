@@ -12,15 +12,11 @@ var userObject = {
 var userSchema = mongoose.Schema(userObject);
 var User = mongoose.model('User', userSchema);
 
-module.exports = User;
+export default User;
 
-module.exports.updateAccessToken = async function (id, accessToken) {
-    var callback;
-    User.update(
+export async function updateAccessToken(id: string, accessToken: string) {
+    return User.update(
         { id },
-        { $set: { "spotify.accessToken": accessToken } },
-        (err, raw) => callback = { err, raw }
+        { $set: { "spotify.accessToken": accessToken } }
     );
-
-    return callback;
 };

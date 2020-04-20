@@ -1,4 +1,6 @@
-var User = require('../../mongo/models/user');
+import { MessageReaction, User } from "discord.js";
+
+var DbUser = require('../../mongo/models/user');
 var updateDbToken = require('../../mongo/models/user').updateAccessToken;
 var WebApiRequest = require('../../../node_modules/spotify-web-api-node/src/webapi-request');
 var HttpManager = require('../../../node_modules/spotify-web-api-node/src/http-manager');
@@ -14,27 +16,27 @@ function getURL(message) {
     return message.content.match(spotifyRegex)[0];
 };
 
-module.exports = {
+export default {
     description: "Enqueues a song to the user's spotify account",
-    execute: async function (reaction, user, api) {
+    execute: async function (reaction: MessageReaction, user: User, api) {
         try {
-            var user = await User.findOne({ id: user.id });
-            api.setAccessToken(user.spotify.accessToken);
-            api.setRefreshToken(user.spotify.refreshToken);
+            var dbUser: any = await DbUser.findOne({ id: user.id });
+            api.setAccessToken(dbUser.spotify.accessToken);
+            api.setRefreshToken(dbUser.spotify.refreshToken);
         } catch {
             reaction.message.channel.send("Something went wrong retrieving your spotify data, have you linked your account?");
             return;
         }
 
         try {
-            var response = await enqueueTrack(reaction, user.spotify.accessToken).catch(e => response = e);
+            var response = await enqueueTrack(reaction, dbUser.spotify.accessToken).catch(e => response = e);
             if (response.statusCode == 401) {
                 var refresh = await api.refreshAccessToken().catch(e => refresh = e);
                 if (refresh.name === 'WebapiError') { reaction.message.channel.send("Could not authenticate - please relink your account"); }
 
                 api.setAccessToken(refresh.body['access_token']);
-                updateDbToken(user.id, refresh.body['access_token']);
-                response = enqueueTrack(reaction, user.spotify.accessToken).catch(e => console.log(e))
+                updateDbToken(dbUser.id, refresh.body['access_token']);
+                response = enqueueTrack(reaction, refresh.body['access_token']).catch(e => console.log(e))
             }
 
             api.resetAccessToken();

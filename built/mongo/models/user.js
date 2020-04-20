@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,6 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose = require('mongoose');
 var userObject = {
     id: { type: String, unique: true },
@@ -46,13 +48,13 @@ var userObject = {
 };
 var userSchema = mongoose.Schema(userObject);
 var User = mongoose.model('User', userSchema);
-module.exports = User;
-module.exports.updateAccessToken = function (id, accessToken) {
+exports.default = User;
+function updateAccessToken(id, accessToken) {
     return __awaiter(this, void 0, void 0, function () {
-        var callback;
         return __generator(this, function (_a) {
-            User.update({ id: id }, { $set: { "spotify.accessToken": accessToken } }, function (err, raw) { return callback = { err: err, raw: raw }; });
-            return [2 /*return*/, callback];
+            return [2 /*return*/, User.update({ id: id }, { $set: { "spotify.accessToken": accessToken } })];
         });
     });
-};
+}
+exports.updateAccessToken = updateAccessToken;
+;

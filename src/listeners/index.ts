@@ -1,7 +1,8 @@
-var flags = require('./flags');
+import { Message } from "discord.js";
+import flags from './flags';
 
-module.exports = {
-    passthrough: function (msg) {
+export default {
+    passthrough: function (msg: Message) {
         for (var key in flags) {
             if (msg.content.includes(key)) {
                 flags[key].listen(msg);

@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     Ping: require('./ping'),
     DootDoot: require('./dootdoot'),
     RedditTop: require('./reddittop'),

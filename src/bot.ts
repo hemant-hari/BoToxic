@@ -1,13 +1,13 @@
 require('dotenv').config();
-var Discord = require('discord.js');
+import * as Discord from 'discord.js';
 var MessageEmbed = require('discord.js').MessageEmbed;
 const bot = new Discord.Client();
-bot.commands = new Discord.Collection();
-const botCommands = require('./commands');
-const botListeners = require('./listeners');
+let commands: string | any = new Discord.Collection();
+import botCommands from './commands';
+import botListeners from './listeners';
 
 Object.keys(botCommands).map(key => {
-    bot.commands.set(botCommands[key].name, botCommands[key]);
+    commands.set(botCommands[key].name, botCommands[key]);
 });
 
 const TOKEN = process.env.TOKEN;
@@ -18,7 +18,7 @@ bot.on('ready', () => {
 });
 
 bot.on('message', msg => {
-    const args = msg.content.split(/ +/);
+    const args: string[] = msg.content.split(/ +/);
     var command = args.shift().toLowerCase();
 
     botListeners.passthrough(msg);
@@ -27,16 +27,16 @@ bot.on('message', msg => {
     command = command.substring(1);
 
     if (command === 'help') {
-        replyWithCommandDescriptions(msg, bot.commands);
+        replyWithCommandDescriptions(msg, commands);
         return;
     }
 
     if (msg.author.bot) return;
-    if (!bot.commands.has(command)) return;
+    if (!commands.has(command)) return;
     if (msg.channel.type === 'dm') return;
 
     try {
-        bot.commands.get(command).execute(msg, args);
+        commands.get(command).execute(msg, args);
         msg.react('☣️');
     } catch (error) {
         console.error(error);
