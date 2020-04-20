@@ -21,7 +21,6 @@ module.exports = {
 
                 api.setAccessToken(refresh.body['access_token']);
                 updateDbToken(msg.author.id, refresh.body['access_token']);
-
                 spotifyDetails = await api.getMyCurrentPlaybackState().catch(e => console.log(e))
             }
 
