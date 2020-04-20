@@ -1,6 +1,7 @@
 module.exports = {
     dict: {
         '⏯️': require('./enqueue'),
+        '⏭️': require('./skipto'),
     },
     filter: function (reaction, user) {
         var listen = true;

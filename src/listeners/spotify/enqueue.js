@@ -1,7 +1,7 @@
 var User = require('../../mongo/models/user');
 var updateDbToken = require('../../mongo/models/user').updateAccessToken;
-var WebApiRequest = require('../../node_modules/spotify-web-api-node/src/webapi-request');
-HttpManager = require('../../node_modules/spotify-web-api-node/src/http-manager');
+var WebApiRequest = require('../../../node_modules/spotify-web-api-node/src/webapi-request');
+HttpManager = require('../../../node_modules/spotify-web-api-node/src/http-manager');
 
 function getURI(message) {
     var url = getURL(message);
