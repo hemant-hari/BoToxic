@@ -67,7 +67,7 @@ function spotifyRefresh(api, call, user, channel) {
                     e_1 = _a.sent();
                     console.log(e_1);
                     channel.send("Something went wrong re-authenticating with spotify - maybe try using the link command again");
-                    throw e_1;
+                    return [3 /*break*/, 6];
                 case 6:
                     try {
                         response = call();
