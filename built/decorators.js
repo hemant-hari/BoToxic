@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var user_1 = require("./mongo/models/user");
-function autoRefresh(api, call, user, channel) {
+function spotifyRefresh(api, call, user, channel) {
     return __awaiter(this, void 0, void 0, function () {
         var dbUser, refresh, e_1, response, e_2;
         return __generator(this, function (_a) {
@@ -67,13 +67,16 @@ function autoRefresh(api, call, user, channel) {
                     e_1 = _a.sent();
                     console.log(e_1);
                     channel.send("Something went wrong re-authenticating with spotify - maybe try using the link command again");
-                    return [3 /*break*/, 6];
+                    throw e_1;
                 case 6:
-                    response = call()
-                        .catch(function (e) {
+                    try {
+                        response = call();
+                    }
+                    catch (e) {
                         console.log(e);
                         channel.send("Something went wrong!");
-                    });
+                    }
+                    ;
                     api.resetAccessToken();
                     api.resetRefreshToken();
                     return [2 /*return*/, response];
@@ -87,4 +90,4 @@ function autoRefresh(api, call, user, channel) {
         });
     });
 }
-exports.autoRefresh = autoRefresh;
+exports.spotifyRefresh = spotifyRefresh;

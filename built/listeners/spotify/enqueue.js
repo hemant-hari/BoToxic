@@ -56,7 +56,7 @@ exports.default = {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
-                decorators_1.autoRefresh(api, function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                decorators_1.spotifyRefresh(api, function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                     return [2 /*return*/, enqueueTrack(reaction, api)];
                 }); }); }, user, reaction.message.channel);
                 return [2 /*return*/];

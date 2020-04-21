@@ -45,7 +45,7 @@ exports.default = {
             var me;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, decorators_1.autoRefresh(api, function () { return api.getMe(); }, msg.author, msg.channel)];
+                    case 0: return [4 /*yield*/, decorators_1.spotifyRefresh(api, function () { return api.getMe(); }, msg.author, msg.channel)];
                     case 1:
                         me = _a.sent();
                         msg.channel.send("Your spotify profile link is " + me.body.external_urls.spotify);

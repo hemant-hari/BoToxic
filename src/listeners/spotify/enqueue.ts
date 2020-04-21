@@ -1,5 +1,5 @@
 import { MessageReaction, User, Message } from "discord.js";
-import { autoRefresh } from "../../decorators";
+import { spotifyRefresh } from "../../decorators";
 import SpotifyWebApi from "spotify-web-api-node";
 
 var WebApiRequest = require('../../../node_modules/spotify-web-api-node/src/webapi-request');
@@ -19,7 +19,7 @@ function getURL(message: Message) {
 export default {
     description: "Enqueues a song to the user's spotify account",
     execute: async function (reaction: MessageReaction, user: User, api: SpotifyWebApi) {
-        autoRefresh(
+        spotifyRefresh(
             api,
             async () => enqueueTrack(reaction, api),
             user,

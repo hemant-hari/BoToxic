@@ -36,7 +36,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var decorators_1 = require("../../decorators");
 exports.default = {
     name: 'share',
     description: 'Shares the current song you are playing on spotify',
@@ -45,7 +44,7 @@ exports.default = {
             var state;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, decorators_1.autoRefresh(api, function () { return api.getMyCurrentPlaybackState(); }, msg.author, msg.channel)];
+                    case 0: return [4 /*yield*/, autoRefresh(api, function () { return api.getMyCurrentPlaybackState(); }, msg.author, msg.channel)];
                     case 1:
                         state = _a.sent();
                         msg.channel.send("You should listen to this! " + state.body.item.external_urls.spotify);

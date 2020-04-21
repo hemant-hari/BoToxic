@@ -1,12 +1,12 @@
 import { Message } from "discord.js";
 import SpotifyWebApi from "spotify-web-api-node";
-import { autoRefresh } from '../../decorators';
+import { spotifyRefresh } from '../../decorators';
 
 export default {
     name: 'getme',
     description: 'Gets your spotify details',
     async execute(msg: Message, args: string[], api: SpotifyWebApi) {
-        let me = await autoRefresh(
+        let me = await spotifyRefresh(
             api,
             () => api.getMe(),
             msg.author,

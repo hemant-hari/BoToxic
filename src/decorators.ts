@@ -2,7 +2,7 @@ import { User, TextChannel, DMChannel, NewsChannel } from "discord.js";
 import { DbUser, updateAccessToken } from "./mongo/models/user";
 import SpotifyWebApi from "spotify-web-api-node";
 
-export async function autoRefresh<T>
+export async function spotifyRefresh<T>
     (
         api: SpotifyWebApi,
         call: () => Promise<T>,
@@ -27,15 +27,17 @@ export async function autoRefresh<T>
             }
             catch (e) {
                 console.log(e);
-                channel.send("Something went wrong re-authenticating with spotify - maybe try using the link command again")
+                channel.send("Something went wrong re-authenticating with spotify - maybe try using the link command again");
             }
         }
 
-        var response = call()
-            .catch(e => {
-                console.log(e);
-                channel.send("Something went wrong!");
-            });
+        try {
+            var response = call()
+        } catch (e) {
+            console.log(e);
+            channel.send("Something went wrong!");
+        };
+
         api.resetAccessToken();
         api.resetRefreshToken();
 
