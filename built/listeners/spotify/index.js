@@ -1,18 +1,21 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var spotify_web_api_node_1 = require("spotify-web-api-node");
-var reactions = require('./reactions');
+var spotify_web_api_node_1 = __importDefault(require("spotify-web-api-node"));
+var reactions_1 = __importDefault(require("./reactions"));
 require('dotenv').config();
-var api = new spotify_web_api_node_1.SpotifyWebApi({
+var api = new spotify_web_api_node_1.default({
     clientId: process.env.SPOTIFY_ID,
     clientSecret: process.env.SPOTIFY_SECRET,
     redirectUri: 'https://botoxic.hemanthari.com/spotifycallback'
 });
-module.exports = {
+exports.default = {
     description: "Listens for spotify links for spotify integration integration",
     listen: function (msg) {
-        reactions.react(msg);
-        var reactionListener = msg.createReactionCollector((reactions.filter), { time: 10 * 60 * 60 * 1000 });
-        reactionListener.on('collect', function (reaction, user) { return reactions.handle(reaction, user, api); });
+        reactions_1.default.react(msg);
+        var reactionListener = msg.createReactionCollector((reactions_1.default.filter), { time: 10 * 60 * 60 * 1000 });
+        reactionListener.on('collect', function (reaction, user) { return reactions_1.default.handle(reaction, user, api); });
     }
 };

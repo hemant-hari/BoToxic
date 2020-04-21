@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,57 +35,22 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var User = require('../../mongo/models/user');
-var updateDbToken = require('../../mongo/models/user').updateAccessToken;
-module.exports = {
+Object.defineProperty(exports, "__esModule", { value: true });
+var decorators_1 = require("../../decorators");
+exports.default = {
     name: 'getme',
     description: 'Gets your spotify details',
     execute: function (msg, args, api) {
         return __awaiter(this, void 0, void 0, function () {
+            var me;
             return __generator(this, function (_a) {
-                User.find({ id: msg.author.id }, function (err, user) {
-                    return __awaiter(this, void 0, void 0, function () {
-                        var spotifyDetails, refresh;
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
-                                case 0:
-                                    if (err) {
-                                        console.log(err);
-                                        msg.channel.send("Oh no! Something went wrong - please don't contact the creator");
-                                    }
-                                    api.setAccessToken(user[0].spotify.accessToken);
-                                    api.setRefreshToken(user[0].spotify.refreshToken);
-                                    return [4 /*yield*/, api.getMe().catch(function (e) { return spotifyDetails = e; })];
-                                case 1:
-                                    spotifyDetails = _a.sent();
-                                    if (!(spotifyDetails.statusCode == 401)) return [3 /*break*/, 4];
-                                    return [4 /*yield*/, api.refreshAccessToken().catch(function (e) { return refresh = e; })];
-                                case 2:
-                                    refresh = _a.sent();
-                                    if (refresh.name === 'WebapiError') {
-                                        msg.channel.send("Could not authenticate - please relink your account");
-                                    }
-                                    api.setAccessToken(refresh.body['access_token']);
-                                    updateDbToken(msg.author.id, refresh.body['access_token']);
-                                    return [4 /*yield*/, api.getMe().catch(function (e) { return console.log(e); })];
-                                case 3:
-                                    spotifyDetails = _a.sent();
-                                    _a.label = 4;
-                                case 4:
-                                    if (spotifyDetails.name !== 'WebapiError') {
-                                        msg.channel.send("Your spotify profile link is " + spotifyDetails.body.external_urls.spotify);
-                                    }
-                                    else {
-                                        msg.channel.send("Something went wrong!");
-                                    }
-                                    api.resetAccessToken();
-                                    api.resetRefreshToken();
-                                    return [2 /*return*/];
-                            }
-                        });
-                    });
-                });
-                return [2 /*return*/];
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, decorators_1.autoRefresh(api, function () { return api.getMe(); }, msg.author, msg.channel)];
+                    case 1:
+                        me = _a.sent();
+                        msg.channel.send("Your spotify profile link is " + me.body.external_urls.spotify);
+                        return [2 /*return*/];
+                }
             });
         });
     },

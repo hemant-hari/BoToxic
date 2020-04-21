@@ -36,23 +36,30 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var mongoose = require('mongoose');
+var mongoose_1 = require("mongoose");
 var userObject = {
     id: { type: String, unique: true },
     username: { type: String, index: true },
     spotify: {
         accessToken: String,
         refreshToken: String,
-        expiry: String,
+        expiry: Number,
     },
 };
-var userSchema = mongoose.Schema(userObject);
-var User = mongoose.model('User', userSchema);
+var userSchema = new mongoose_1.Schema(userObject);
+var User = mongoose_1.model('User', userSchema);
 exports.default = User;
-function updateAccessToken(id, accessToken) {
+exports.DbUser = User;
+function updateAccessToken(id, accessToken, expiry) {
+    if (expiry === void 0) { expiry = 3600; }
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            return [2 /*return*/, User.update({ id: id }, { $set: { "spotify.accessToken": accessToken } })];
+            return [2 /*return*/, User.update({ id: id }, {
+                    $set: {
+                        "spotify.accessToken": accessToken,
+                        "spotify.expiry": Date.now() + expiry,
+                    }
+                })];
         });
     });
 }

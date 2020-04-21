@@ -35,28 +35,39 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
 var createError = require('http-errors');
-var SpotifyWebApi = require('spotify-web-api-node');
-var express = require('express');
+var express_1 = __importDefault(require("express"));
 var path = require('path');
 var cors = require('cors');
 require('dotenv').config();
-var mongoose = require('./mongo');
-var User = require('./mongo/models/user');
+var user_1 = require("./mongo/models/user");
+var spotify_web_api_node_1 = __importDefault(require("spotify-web-api-node"));
+var mongoose_1 = require("mongoose");
+var config_1 = __importDefault(require("./mongo/config"));
+mongoose_1.connect(config_1.default.url, { useNewUrlParser: true });
+exports.db = mongoose_1.connection;
+exports.db.on('error', console.error.bind(console, 'connection error:'));
+exports.db.once('open', function () {
+    console.log("Connected to MongoDB Server");
+});
 //start the bot
 var botoxic = require('./bot');
-var app = express();
+var app = express_1.default();
 var clientId = process.env.SPOTIFY_ID;
 var clientSecret = process.env.SPOTIFY_SECRET;
 var redirectUri = "https://botoxic.hemanthari.com/spotifycallback";
-var spotifyApi = new SpotifyWebApi({ clientId: clientId, clientSecret: clientSecret, redirectUri: redirectUri });
+var spotifyApi = new spotify_web_api_node_1.default({ clientId: clientId, clientSecret: clientSecret, redirectUri: redirectUri });
 //Middleware
 app.use(cors({ credentials: true, origin: true }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express_1.default.json());
+app.use(express_1.default.urlencoded({ extended: false }));
+app.use(express_1.default.static(path.join(__dirname, 'public')));
 // Static file serving
-app.use(express.static('public'));
+app.use(express_1.default.static('public'));
 app.get('/', entryPoint);
 function entryPoint(req, res) {
     console.log("here I am buddy boy");
@@ -65,12 +76,12 @@ function entryPoint(req, res) {
 app.listen(8000, function () { return console.log('listening on port 8000'); });
 app.get('/spotifycallback', function (req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var code, state, accessGrant, id, username, user;
+        var code, state, accessGrant, stateArray, id, username, expiryNum, user;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    code = req.query.code || null;
-                    state = req.query.state || null;
+                    code = req.query.code.toString() || null;
+                    state = req.query.state.toString() || null;
                     if (state === null) {
                         res.send("Authorisation could not connect to your discord user");
                     }
@@ -80,19 +91,20 @@ app.get('/spotifycallback', function (req, res) {
                     if (!accessGrant) {
                         return [2 /*return*/];
                     }
-                    state = state.split('_');
-                    id = state[0];
-                    username = state[1];
+                    stateArray = state.split('_');
+                    id = stateArray[0];
+                    username = stateArray[1];
+                    expiryNum = Date.now() + accessGrant.body.expires_in * 1000;
                     user = {
                         id: id,
                         username: username,
                         spotify: {
                             accessToken: accessGrant.body.access_token,
                             refreshToken: accessGrant.body.refresh_token,
-                            expiry: accessGrant.body.expires_in,
+                            expiry: expiryNum,
                         },
                     };
-                    User
+                    user_1.DbUser
                         .updateOne({ id: id }, user, { upsert: true, setDefaultsOnInsert: true })
                         .catch(function (e) { return console.log(e); });
                     res.sendFile(path.join(__dirname, 'public/app.html'));

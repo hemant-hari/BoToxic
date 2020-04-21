@@ -1,41 +1,16 @@
-var User = require('../../mongo/models/user');
-var updateDbToken = require('../../mongo/models/user').updateAccessToken;
+import { autoRefresh } from '../../decorators';
+import { Message } from 'discord.js';
+import SpotifyWebApi from 'spotify-web-api-node';
 
-module.exports = {
+export default {
     name: 'share',
     description: 'Shares the current song you are playing on spotify',
-    async execute(msg, args, api) {
-        User.find({ id: msg.author.id }, async function (err, user) {
-            if (err) {
-                console.log(err);
-                msg.channel.send("Oh no! Something went wrong - please don't contact the creator");
-            }
-
-            api.setAccessToken(user[0].spotify.accessToken);
-            api.setRefreshToken(user[0].spotify.refreshToken);
-
-            var spotifyDetails = await api.getMyCurrentPlaybackState().catch(e => spotifyDetails = e);
-            if (spotifyDetails.statusCode == 401) {
-                var refresh = await api.refreshAccessToken().catch(e => refresh = e);
-                if (refresh.name === 'WebapiError') { msg.channel.send("Could not authenticate - please relink your account"); }
-
-                api.setAccessToken(refresh.body['access_token']);
-                updateDbToken(msg.author.id, refresh.body['access_token']);
-                spotifyDetails = await api.getMyCurrentPlaybackState().catch(e => console.log(e))
-            }
-
-            if (spotifyDetails.name !== 'WebapiError') {
-                msg.channel.send(`You should listen to this! ${spotifyDetails.body.item.external_urls.spotify}`);
-            }
-            else if (spotifyDetails.statusCode == 204) {
-                msg.channel.send('You are either not playing a song or in a private session');
-            }
-            else {
-                msg.channel.send("Something went wrong!");
-            }
-
-            api.resetAccessToken();
-            api.resetRefreshToken();
-        });
+    async execute(msg: Message, args: string[], api: SpotifyWebApi) {
+        let state = await autoRefresh(
+            api,
+            () => api.getMyCurrentPlaybackState(),
+            msg.author,
+            msg.channel);
+        msg.channel.send(`You should listen to this! ${state.body.item.external_urls.spotify}`);
     },
 };

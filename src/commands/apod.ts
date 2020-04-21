@@ -1,14 +1,13 @@
-var axios = require('axios');
-var MessageEmbed = require('discord.js').MessageEmbed;
+import axios from 'axios';
+import { MessageEmbed, Message } from 'discord.js';
 
-module.exports = {
+export default {
     name: 'apod',
     description: 'Grabs the Astronomy Picture Of the Day from NASA (Optionally input date in YYYY-MM-DD format)',
-    execute(msg, args) {
+    execute(msg: Message, args: string[]) {
         var date = args.length >= 1 ? "&date=" + args[0] : "";
         axios.get("https://api.nasa.gov/planetary/apod?api_key=" + process.env.NASA_TOKEN + date)
             .then(response => {
-                console.log(response);
                 var embed = new MessageEmbed();
                 embed
                     .setTitle(response.data.title)

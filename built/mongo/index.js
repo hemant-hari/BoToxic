@@ -11,9 +11,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose = __importStar(require("mongoose"));
+var mongoose_1 = require("mongoose");
 var config_1 = __importDefault(require("./config"));
-mongoose.connect(config_1.default.url, { useNewUrlParser: true });
-exports.db = mongoose.connection;
+mongoose_1.connect(config_1.default.url, { useNewUrlParser: true });
+exports.db = mongoose_1.connection;
 exports.db.on('error', console.error.bind(console, 'connection error:'));
 exports.db.once('open', function () {
     console.log("Connected to MongoDB Server");

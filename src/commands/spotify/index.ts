@@ -1,8 +1,9 @@
-var SpotifyWebApi = require('spotify-web-api-node');
-var Discord = require('discord.js');
-var MessageEmbed = require('discord.js').MessageEmbed;
-var subCommandList = require('./subcommands');
-var subCommands = new Discord.Collection();
+import SpotifyWebApi from "spotify-web-api-node";
+import { Collection, MessageEmbed, Message } from 'discord.js'
+
+import subCommandList from './subcommands';
+
+var subCommands: any | any = new Collection();
 
 require('dotenv').config();
 
@@ -17,14 +18,11 @@ var spotifyApi = new SpotifyWebApi({
     redirectUri: 'https://botoxic.hemanthari.com/spotifycallback'
 });
 
-module.exports = {
+export default {
     name: 'spotify',
     description: 'Spotify integration - type "$spotify help" for more.',
-    execute(msg, args) {
+    execute(msg: Message, args: string[]) {
         let subCommand = args[0] || 'help';
-
-        console.log(subCommand)
-
         if (subCommand === 'help') {
             replyWithSubCommandDescriptions(msg, subCommands);
             return;

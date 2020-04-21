@@ -1,7 +1,7 @@
 import { Message } from "discord.js";
-import { SpotifyWebApi } from "spotify-web-api-node";
+import SpotifyWebApi from 'spotify-web-api-node';
+import reactions from './reactions';
 
-var reactions = require('./reactions');
 require('dotenv').config();
 
 var api = new SpotifyWebApi({
@@ -10,7 +10,7 @@ var api = new SpotifyWebApi({
     redirectUri: 'https://botoxic.hemanthari.com/spotifycallback'
 });
 
-module.exports = {
+export default {
     description: "Listens for spotify links for spotify integration integration",
     listen: function (msg: Message) {
         reactions.react(msg);

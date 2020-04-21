@@ -1,10 +1,10 @@
-var axios = require('axios');
-var MessageEmbed = require('discord.js').MessageEmbed;
+import axios from 'axios';
+import { Message, MessageEmbed } from 'discord.js';
 
-module.exports = {
+export default {
     name: 'rtop',
     description: 'Grabs the top reddit post for the given subreddit',
-    execute(msg, args) {
+    execute(msg: Message, args: string[]) {
         if (args.length <= 0) return;
         axios.get('https://reddit.com/r/' + args[0] + '.json')
             .then(res => {

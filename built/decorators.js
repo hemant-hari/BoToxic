@@ -36,22 +36,55 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var decorators_1 = require("../../decorators");
-exports.default = {
-    name: 'share',
-    description: 'Shares the current song you are playing on spotify',
-    execute: function (msg, args, api) {
-        return __awaiter(this, void 0, void 0, function () {
-            var state;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, decorators_1.autoRefresh(api, function () { return api.getMyCurrentPlaybackState(); }, msg.author, msg.channel)];
-                    case 1:
-                        state = _a.sent();
-                        msg.channel.send("You should listen to this! " + state.body.item.external_urls.spotify);
-                        return [2 /*return*/];
-                }
-            });
+var user_1 = require("./mongo/models/user");
+function autoRefresh(api, call, user, channel) {
+    return __awaiter(this, void 0, void 0, function () {
+        var dbUser, refresh, e_1, response, e_2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, user_1.DbUser.findOne({ id: user.id })
+                        .catch(function (e) {
+                        channel.send("Something went wrong retrieving your spotify data, have you linked your account?");
+                    })];
+                case 1:
+                    dbUser = _a.sent();
+                    _a.label = 2;
+                case 2:
+                    _a.trys.push([2, 7, , 8]);
+                    api.setAccessToken(dbUser.spotify.accessToken);
+                    api.setRefreshToken(dbUser.spotify.refreshToken);
+                    if (!(Date.now() > dbUser.spotify.expiry)) return [3 /*break*/, 6];
+                    _a.label = 3;
+                case 3:
+                    _a.trys.push([3, 5, , 6]);
+                    return [4 /*yield*/, api.refreshAccessToken()];
+                case 4:
+                    refresh = _a.sent();
+                    api.setAccessToken(refresh.body['access_token']);
+                    user_1.updateAccessToken(dbUser.id, refresh.body['access_token']);
+                    return [3 /*break*/, 6];
+                case 5:
+                    e_1 = _a.sent();
+                    console.log(e_1);
+                    channel.send("Something went wrong re-authenticating with spotify - maybe try using the link command again");
+                    return [3 /*break*/, 6];
+                case 6:
+                    response = call()
+                        .catch(function (e) {
+                        console.log(e);
+                        channel.send("Something went wrong!");
+                    });
+                    api.resetAccessToken();
+                    api.resetRefreshToken();
+                    return [2 /*return*/, response];
+                case 7:
+                    e_2 = _a.sent();
+                    console.log(e_2);
+                    channel.send("Oh no, something went wrong dealing with spotify!");
+                    return [3 /*break*/, 8];
+                case 8: return [2 /*return*/];
+            }
         });
-    },
-};
+    });
+}
+exports.autoRefresh = autoRefresh;

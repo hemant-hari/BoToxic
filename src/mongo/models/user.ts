@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+import { Schema, model } from 'mongoose';
 
 var userObject = {
     id: { type: String, unique: true },
@@ -6,17 +6,25 @@ var userObject = {
     spotify: {
         accessToken: String,
         refreshToken: String,
-        expiry: String,
+        expiry: Number,
     },
 };
-var userSchema = mongoose.Schema(userObject);
-var User = mongoose.model('User', userSchema);
+var userSchema = new Schema(userObject);
+var User = model('User', userSchema);
 
 export default User;
 
-export async function updateAccessToken(id: string, accessToken: string) {
+export var DbUser = User;
+
+export async function updateAccessToken(id: string, accessToken: string, expiry: number = 3600) {
+
     return User.update(
         { id },
-        { $set: { "spotify.accessToken": accessToken } }
+        {
+            $set: {
+                "spotify.accessToken": accessToken,
+                "spotify.expiry": Date.now() + expiry,
+            }
+        }
     );
 };

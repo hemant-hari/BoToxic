@@ -1,7 +1,14 @@
-module.exports = {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var enqueue_1 = __importDefault(require("./enqueue"));
+var skipto_1 = __importDefault(require("./skipto"));
+exports.default = {
     dict: {
-        '⏯️': require('./enqueue'),
-        '⏭️': require('./skipto'),
+        '⏯️': enqueue_1.default,
+        '⏭️': skipto_1.default,
     },
     filter: function (reaction, user) {
         var listen = true;

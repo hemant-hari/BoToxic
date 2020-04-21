@@ -36,8 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var DbUser = require('../../mongo/models/user');
-var updateDbToken = require('../../mongo/models/user').updateAccessToken;
+var decorators_1 = require("../../decorators");
 var WebApiRequest = require('../../../node_modules/spotify-web-api-node/src/webapi-request');
 var HttpManager = require('../../../node_modules/spotify-web-api-node/src/http-manager');
 function getURI(message) {
@@ -55,54 +54,21 @@ exports.default = {
     description: "Enqueues a song to the user's spotify account",
     execute: function (reaction, user, api) {
         return __awaiter(this, void 0, void 0, function () {
-            var dbUser, _a, response, refresh, e_1;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        _b.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, DbUser.findOne({ id: user.id })];
-                    case 1:
-                        dbUser = _b.sent();
-                        api.setAccessToken(dbUser.spotify.accessToken);
-                        api.setRefreshToken(dbUser.spotify.refreshToken);
-                        return [3 /*break*/, 3];
-                    case 2:
-                        _a = _b.sent();
-                        reaction.message.channel.send("Something went wrong retrieving your spotify data, have you linked your account?");
-                        return [2 /*return*/];
-                    case 3:
-                        _b.trys.push([3, 7, , 8]);
-                        return [4 /*yield*/, enqueueTrack(reaction, dbUser.spotify.accessToken).catch(function (e) { return response = e; })];
-                    case 4:
-                        response = _b.sent();
-                        if (!(response.statusCode == 401)) return [3 /*break*/, 6];
-                        return [4 /*yield*/, api.refreshAccessToken().catch(function (e) { return refresh = e; })];
-                    case 5:
-                        refresh = _b.sent();
-                        if (refresh.name === 'WebapiError') {
-                            reaction.message.channel.send("Could not authenticate - please relink your account");
-                        }
-                        api.setAccessToken(refresh.body['access_token']);
-                        updateDbToken(dbUser.id, refresh.body['access_token']);
-                        response = enqueueTrack(reaction, refresh.body['access_token']).catch(function (e) { return console.log(e); });
-                        _b.label = 6;
-                    case 6:
-                        api.resetAccessToken();
-                        api.resetRefreshToken();
-                        return [3 /*break*/, 8];
-                    case 7:
-                        e_1 = _b.sent();
-                        console.log(e_1);
-                        return [3 /*break*/, 8];
-                    case 8: return [2 /*return*/];
-                }
+            var _this = this;
+            return __generator(this, function (_a) {
+                decorators_1.autoRefresh(api, function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                    return [2 /*return*/, enqueueTrack(reaction, api)];
+                }); }); }, user, reaction.message.channel);
+                return [2 /*return*/];
             });
         });
     }
 };
-function enqueueTrack(reaction, accessToken) {
+function enqueueTrack(reaction, api) {
     return __awaiter(this, void 0, void 0, function () {
+        var accessToken;
         return __generator(this, function (_a) {
+            accessToken = api.getAccessToken();
             return [2 /*return*/, (WebApiRequest.builder(accessToken)
                     .withPath('/v1/me/player/queue')
                     .withHeaders({ 'Content-Type': 'application/json' })

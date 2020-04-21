@@ -1,4 +1,6 @@
-module.exports = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = {
     name: 'dootdoot',
     description: 'Doots the Doot!',
     execute: function (msg, args) {
