@@ -16,6 +16,10 @@ export default {
                             ? posts[2]
                             : posts[1]).data;
 
+                if (responsePost.over_18) {
+                    msg.channel.send("Not on my good christian server.")
+                    return;
+                }
                 var embed = new MessageEmbed();
                 embed
                     .setTitle(responsePost.title)
