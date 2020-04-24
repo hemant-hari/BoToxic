@@ -19,6 +19,10 @@ exports.default = {
                 : posts[1].data.stickied
                     ? posts[2]
                     : posts[1]).data;
+            if (responsePost.over_18) {
+                msg.channel.send("Not on my good christian server.");
+                return;
+            }
             var embed = new discord_js_1.MessageEmbed();
             embed
                 .setTitle(responsePost.title)
