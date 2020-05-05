@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import { IUser } from '../../interfaces';
 
 var userObject = {
     id: { type: String, unique: true },
@@ -10,14 +11,12 @@ var userObject = {
     },
 };
 var userSchema = new Schema(userObject);
-var User = model('User', userSchema);
+var User = model<IUser>('User', userSchema);
 
 export default User;
-
 export var DbUser = User;
 
 export async function updateAccessToken(id: string, accessToken: string, expiry: number = 3600) {
-
     return User.update(
         { id },
         {

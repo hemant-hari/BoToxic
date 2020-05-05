@@ -37,20 +37,26 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var decorators_1 = require("../../decorators");
+var guildconfig_1 = require("../../mongo/models/guildconfig");
 exports.default = {
     name: 'share',
     description: 'Shares the current song you are playing on spotify',
     execute: function (msg, args, api) {
         return __awaiter(this, void 0, void 0, function () {
-            var state;
+            var archiveChannel, state;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, decorators_1.spotifyRefresh(api, function () { return api.getMyCurrentPlaybackState(); }, msg.author, msg.channel)];
-                    case 1:
-                        state = _a.sent();
-                        msg.channel.send("You should listen to this! " + state.body.item.external_urls.spotify);
-                        return [2 /*return*/];
-                }
+                archiveChannel = guildconfig_1.getArchive(msg.guild.id);
+                state = decorators_1.spotifyRefresh(api, function () { return api.getMyCurrentPlaybackState(); }, msg.author, msg.channel);
+                Promise.all([archiveChannel, state]).then(function (_a) {
+                    var archiveChannel = _a[0], state = _a[1];
+                    var msgStr = "You should listen to this! " + state.body.item.external_urls.spotify;
+                    msg.channel.send(msgStr);
+                    if (archiveChannel) {
+                        msg.delete({ timeout: 3600 * 1000 });
+                        msg.guild.channels.cache.get(archiveChannel).send(msgStr);
+                    }
+                });
+                return [2 /*return*/];
             });
         });
     },

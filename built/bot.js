@@ -12,11 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 require('dotenv').config();
 var Discord = __importStar(require("discord.js"));
-var MessageEmbed = require('discord.js').MessageEmbed;
-var bot = new Discord.Client();
-var commands = new Discord.Collection();
+var discord_js_1 = require("discord.js");
 var commands_1 = __importDefault(require("./commands"));
 var listeners_1 = __importDefault(require("./listeners"));
+var bot = new Discord.Client();
+var commands = new Discord.Collection();
 Object.keys(commands_1.default).map(function (key) {
     commands.set(commands_1.default[key].name, commands_1.default[key]);
 });
@@ -52,7 +52,7 @@ bot.on('message', function (msg) {
     }
 });
 function replyWithCommandDescriptions(msg, commands) {
-    var embed = new MessageEmbed();
+    var embed = new discord_js_1.MessageEmbed();
     commands.map(function (cmd) {
         embed.addField('$' + cmd.name, cmd.description);
     });

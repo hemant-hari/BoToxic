@@ -1,10 +1,12 @@
 require('dotenv').config();
 import * as Discord from 'discord.js';
-var MessageEmbed = require('discord.js').MessageEmbed;
-const bot = new Discord.Client();
-let commands: string | any = new Discord.Collection();
+import { MessageEmbed } from 'discord.js';
+import { ICommand } from './interfaces'
 import botCommands from './commands';
 import botListeners from './listeners';
+
+const bot = new Discord.Client();
+let commands = new Discord.Collection<string, ICommand>();
 
 Object.keys(botCommands).map(key => {
     commands.set(botCommands[key].name, botCommands[key]);
