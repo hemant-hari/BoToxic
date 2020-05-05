@@ -19,7 +19,7 @@ export default {
             msg.channel.send(msgStr);
             if (archiveChannel) {
                 msg.delete({ timeout: 3600 * 1000 });
-                (<TextChannel>msg.guild.channels.cache.get(archiveChannel)).send(msgStr);
+                (<TextChannel>msg.guild.channels.cache.get(archiveChannel)).send(`${msgStr} - Shared by <@${msg.author}>`);
             }
         })
     },

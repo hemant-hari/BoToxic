@@ -53,7 +53,7 @@ exports.default = {
                     msg.channel.send(msgStr);
                     if (archiveChannel) {
                         msg.delete({ timeout: 3600 * 1000 });
-                        msg.guild.channels.cache.get(archiveChannel).send(msgStr);
+                        msg.guild.channels.cache.get(archiveChannel).send(msgStr + " - Shared by <@" + msg.author + ">");
                     }
                 });
                 return [2 /*return*/];
