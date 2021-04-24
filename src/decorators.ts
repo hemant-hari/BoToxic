@@ -2,19 +2,18 @@ import { User, TextChannel, DMChannel, NewsChannel } from "discord.js";
 import { DbUser, updateAccessToken } from "./mongo/models/user";
 import SpotifyWebApi from "spotify-web-api-node";
 
-export async function spotifyRefresh<T>
-    (
-        api: SpotifyWebApi,
-        call: () => Promise<T>,
-        user: User,
-        channel: TextChannel | DMChannel | NewsChannel
-    ): Promise<T | void> {
-    var dbUser: any
-        = await DbUser.findOne({ id: user.id })
-            .catch(e => {
-                channel.send("Something went wrong retrieving your spotify data, have you linked your account?")
-            });
+export async function spotifyRefresh<T>(
+    api: SpotifyWebApi,
+    call: () => Promise<T>,
+    user: User,
+    channel: TextChannel | DMChannel | NewsChannel): Promise<T> {
+    var dbUser: any = await DbUser.findOne({ id: user.id })
+        .catch(e => {
+            channel.send("Something went wrong retrieving your spotify data, have you linked your account?")
+            return null;
+        });
 
+    var response = null;
     try {
         api.setAccessToken(dbUser.spotify.accessToken);
         api.setRefreshToken(dbUser.spotify.refreshToken);
@@ -32,7 +31,7 @@ export async function spotifyRefresh<T>
         }
 
         try {
-            var response = call()
+            response = call()
         } catch (e) {
             console.log(e);
             channel.send("Something went wrong!");
@@ -40,10 +39,10 @@ export async function spotifyRefresh<T>
 
         api.resetAccessToken();
         api.resetRefreshToken();
-
-        return response;
     } catch (e) {
         console.log(e);
         channel.send("Oh no, something went wrong dealing with spotify!");
     }
+
+    return response;
 }

@@ -39,15 +39,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var user_1 = require("./mongo/models/user");
 function spotifyRefresh(api, call, user, channel) {
     return __awaiter(this, void 0, void 0, function () {
-        var dbUser, refresh, e_1, response, e_2;
+        var dbUser, response, refresh, e_1, e_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, user_1.DbUser.findOne({ id: user.id })
                         .catch(function (e) {
                         channel.send("Something went wrong retrieving your spotify data, have you linked your account?");
+                        return null;
                     })];
                 case 1:
                     dbUser = _a.sent();
+                    response = null;
                     _a.label = 2;
                 case 2:
                     _a.trys.push([2, 7, , 8]);
@@ -79,13 +81,13 @@ function spotifyRefresh(api, call, user, channel) {
                     ;
                     api.resetAccessToken();
                     api.resetRefreshToken();
-                    return [2 /*return*/, response];
+                    return [3 /*break*/, 8];
                 case 7:
                     e_2 = _a.sent();
                     console.log(e_2);
                     channel.send("Oh no, something went wrong dealing with spotify!");
                     return [3 /*break*/, 8];
-                case 8: return [2 /*return*/];
+                case 8: return [2 /*return*/, response];
             }
         });
     });

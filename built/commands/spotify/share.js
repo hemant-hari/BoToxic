@@ -43,17 +43,17 @@ exports.default = {
     description: 'Shares the current song you are playing on spotify',
     execute: function (msg, args, api) {
         return __awaiter(this, void 0, void 0, function () {
-            var archiveChannel, state;
+            var guildCfg, state;
             return __generator(this, function (_a) {
-                archiveChannel = guildconfig_1.getArchive(msg.guild.id);
+                guildCfg = guildconfig_1.getArchiveConfig(msg.guild.id);
                 state = decorators_1.spotifyRefresh(api, function () { return api.getMyCurrentPlaybackState(); }, msg.author, msg.channel);
-                Promise.all([archiveChannel, state]).then(function (_a) {
-                    var archiveChannel = _a[0], state = _a[1];
+                Promise.all([guildCfg, state]).then(function (_a) {
+                    var guildCfg = _a[0], state = _a[1];
                     var msgStr = "You should listen to this! " + state.body.item.external_urls.spotify;
                     msg.channel.send(msgStr);
-                    if (archiveChannel) {
-                        msg.delete({ timeout: 3600 * 1000 });
-                        msg.guild.channels.cache.get(archiveChannel).send(msgStr + " - Shared by <@" + msg.author + ">");
+                    if (guildCfg.spotify.archive) {
+                        msg.delete({ timeout: guildCfg.spotify.expiry * 1000 });
+                        msg.guild.channels.cache.get(guildCfg.spotify.archiveChannel).send(msgStr + " - Shared by <@" + msg.author + ">");
                     }
                 });
                 return [2 /*return*/];
